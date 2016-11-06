@@ -9,10 +9,16 @@
  *       0 otherwise
  */
 
+ /*
+ or a b = nand (not a) (not b)
+ */
+
 CHIP Or {
     IN a, b;
     OUT out;
 
     PARTS:
-    // Put your code here:
+    Nand(a=nota,b=notb,out=out);
+    Not(in=a,out=nota);
+    Not(in=b,out=notb);
 }
