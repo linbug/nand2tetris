@@ -19,6 +19,9 @@ not(
         and(a,b), and(not(a),not(b))
       )
    )
+
+alternatively:
+  or (and a (not b)) (and (not a) b)
 */
 
 CHIP Xor {
@@ -26,11 +29,9 @@ CHIP Xor {
     OUT out;
 
     PARTS:
-    // Put your code here:
-    And(a=a,b=b,out=ab);
+    And(a=a,b=notb,out=and1);
+    And(a=nota, b=b, out=and2);
     Not(in=a,out=nota);
     Not(in=b,out=notb);
-    And(a=nota, b=notb, out=notboth);
-    Or(a=ab, b=notboth, out=orout);
-    Not(in=orout, out=out);
+    Or(a=and1, b=and2, out=out);
 }
