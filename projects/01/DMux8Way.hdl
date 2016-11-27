@@ -7,7 +7,11 @@
  * 8-way demultiplexor:
  * {a, b, c, d, e, f, g, h} = {in, 0, 0, 0, 0, 0, 0, 0} if sel == 000
  *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
- *                            etc.
+ *                            {0, 0, in, 0, 0, 0, 0, 0} if sel == 010
+ *                            {0, 0, 0, in, 0, 0, 0, 0} if sel == 011
+ *                            {0, 0, 0, 0, in, 0, 0, 0} if sel == 100
+ *                            {0, 0, 0, 0, 0, in, 0, 0} if sel == 101
+ *                            {0, 0, 0, 0, 0, 0, in, 0} if sel == 110
  *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
  */
 
@@ -17,4 +21,9 @@ CHIP DMux8Way {
 
     PARTS:
     // Put your code here:
+    DMux4Way(in=in,a=le,b=ft,c=ri,d=ht,sel[0]=sel[0],sel[1]=sel[1]);
+    DMux(in=le,a=a,b=e,sel=sel[2]);
+    DMux(in=ft,a=b,b=f,sel=sel[2]);
+    DMux(in=ri,a=c,b=g,sel=sel[2]);
+    DMux(in=ht,a=d,b=h,sel=sel[2]);
 }
