@@ -17,4 +17,22 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    Or(a=reset, b=load, out=resetorload);
+    Or(a=resetorload, b=inc, out=regload);
+    Mux16(b=false, a=inorincpc, sel=reset, out=regin);
+    Mux16(b=in, a=incpc, sel=load, out=inorincpc);
+    Inc16(in=out1, out=incpc);
+    Register(in=regin , load=regload, out=out1);  
+    Or16(a=out1, b=false, out=out);
 }
+/**
+reset    load    inc == regin     regload
+1        0       0      0         1
+1        1       0      0         1
+1        0       1      0         1
+1        1       1      0         1
+0        1       0      in        1
+0        1       1      in        1
+0        0       1      incpc     1
+0        0       0      -         0
+**/
