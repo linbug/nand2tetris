@@ -18,18 +18,15 @@ M=0
 M=0
 
 (LOOP)
+@keypress // set keypress to 0
+M=0
 @KBD   //
 D=M    // checking if M[KBD] == 0
 @THEN  //
 D;JEQ  // if so, jump to THEN
-@keypress // otherwise, set M[keypress] to 65535
+@keypress // otherwise, set M[keypress] to 1
 M=1
-@FI
-0;JMP     // and jump over the THEN to get to FI
 (THEN)
-@keypress // set M[keypress] to 0
-M=0
-(FI)
 @keypress
 D=M
 @clear
