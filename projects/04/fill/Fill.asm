@@ -75,7 +75,7 @@ D=D-M // D = 8192-M[pos]
 @pos // A = pos
 M=M+1 // M[pos] = M[pos]+1
 @LOOP
-D;JLT // jump to LOOP if 8192-(old)M[pos] < 0
+D;JGT // jump to LOOP if 8192-(old)M[pos] > 0
 @pos
 M=0
 @LOOP // goto LOOP
