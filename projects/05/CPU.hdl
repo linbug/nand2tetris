@@ -52,8 +52,21 @@ CHIP CPU {
         zx=instruction[11], nx=instruction[10],
         zy=instruction[9], ny=instruction[8],
         f=instruction[7], no=instruction[6],
-        out=aluout,
-        zr=???, ng=???);
+        out=aluout, zr=aluzr, ng=alung);
 
-    PC(in=nextpc,load=loadpc,inc=incpc,reset=reset,out=pc);
+    // j1 = instruction[2], aluout < 0
+    // j2 = instruction[1], aluout = 0
+    // j3 = instruction[0], aluout > 0
+    // if the j1,j2,j3 conditions are satisfied by zr,ng
+    // then loadpc = 1
+    // else loadpc = 0
+    And(a=instruction[2], b=alung, out=j1s);
+    And(a=instruction[1], b=aluzr, out=j2s);
+    And(a=instruction[0], b=alups, out=j3s);
+    Not(in=alung, out=alunng); // alunng: ¬(aluout < 0)
+    Not(in=aluzr, out=alunzr); // alunzr: aluout ≠ 0
+    And(a=alunng, b=alunzr, out=alups); // alups: aluout > 0
+    Or(a=j1s,b=j2s,out=j12s);
+    Or(a=j12s,b=j3s,out=loadpc);
+    PC(in=outa,load=loadpc,inc=true,reset=reset,out=pc);
 }
