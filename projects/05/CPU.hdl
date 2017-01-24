@@ -39,14 +39,18 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    Not(in=instruction[15],out=loada);
+    And(a=instruction[15], b=instruction[3], out=cloada);
+    Not(in=instruction[15], out=aloada);
+    Or(a=aloada, b=cloada, out=loada);
 
-    Mux16(a=instruction[0..14],b=???,sel=???,out=loadawith);
+    Mux16(a=instruction,b=aluout,sel=instruction[15],out=loadawith);
 
     Mux16(a=outa,b=inM,sel=instruction[12],out=aorm);
 
-    Register(in=loadawith,load=loada,out=outa);
-    Register(in=loaddwith,load=loadd,out=outd);
+    Register(in=loadawith,load=loada,out=outa);       //A
+    Register(in=aluout,load=instruction[4],out=outd); //D
+
+    16to15(in=outa,out=addressM);
 
     ALU(x=outd, y=aorm,
         zx=instruction[11], nx=instruction[10],
@@ -68,5 +72,18 @@ CHIP CPU {
     And(a=alunng, b=alunzr, out=alups); // alups: aluout > 0
     Or(a=j1s,b=j2s,out=j12s);
     Or(a=j12s,b=j3s,out=loadpc);
-    PC(in=outa,load=loadpc,inc=true,reset=reset,out=pc);
+    PC(in=outa,load=loadpc,inc=true,reset=reset,out=outpc);
+    16to15(in=outpc,out=pc);
+
+    // d3 = instruction[3], controls A register 
+    // d2 = instruction[4], controls D register
+    // d1 = instruction[5], controls M (M[A])
+
+    And(a=instruction[15], b=instruction[5], out=writeM);
+
+    
+    
+
+    
+    
 }
