@@ -1,4 +1,3 @@
-
     CHIP 16to15 {
     IN a[16];
     OUT out[15];
