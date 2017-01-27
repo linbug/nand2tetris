@@ -50,7 +50,7 @@ CHIP CPU {
     Register(in=loadawith,load=loada,out=outa);       //A
     Register(in=aluout,load=instruction[4],out=outd); //D
 
-    16to15(in=outa,out=addressM);
+    stof(in=outa,out=addressM);
 
     ALU(x=outd, y=aorm,
         zx=instruction[11], nx=instruction[10],
@@ -73,17 +73,17 @@ CHIP CPU {
     Or(a=j1s,b=j2s,out=j12s);
     Or(a=j12s,b=j3s,out=loadpc);
     PC(in=outa,load=loadpc,inc=true,reset=reset,out=outpc);
-    16to15(in=outpc,out=pc);
+    stof(in=outpc,out=pc);
 
-    // d3 = instruction[3], controls A register 
+    // d3 = instruction[3], controls A register
     // d2 = instruction[4], controls D register
     // d1 = instruction[5], controls M (M[A])
 
     And(a=instruction[15], b=instruction[5], out=writeM);
 
-    
-    
 
-    
-    
+
+
+
+
 }
