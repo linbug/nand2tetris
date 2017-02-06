@@ -47,8 +47,8 @@ CHIP CPU {
 
     Mux16(a=outa,b=inM,sel=instruction[12],out=aorm);
 
-    Register(in=loadawith,load=loada,out=outa);       //A
-    Register(in=aluout,load=instruction[4],out=outd); //D
+    ARegister(in=loadawith,load=loada,out=outa);       //A
+    DRegister(in=aluout,load=instruction[4],out=outd); //D
 
     stof(in=outa,out=addressM);
 
@@ -80,10 +80,4 @@ CHIP CPU {
     // d1 = instruction[5], controls M (M[A])
 
     And(a=instruction[15], b=instruction[5], out=writeM);
-
-
-
-
-
-
 }
