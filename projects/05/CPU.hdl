@@ -39,7 +39,7 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    And(a=instruction[15], b=instruction[3], out=cloada);
+    And(a=instruction[15], b=instruction[5], out=cloada);
     Not(in=instruction[15], out=aloada);
     Or(a=aloada, b=cloada, out=loada);
 
@@ -48,7 +48,8 @@ CHIP CPU {
     Mux16(a=outa,b=inM,sel=instruction[12],out=aorm);
 
     ARegister(in=loadawith,load=loada,out=outa);       //A
-    DRegister(in=aluout,load=instruction[4],out=outd); //D
+    And(a=instruction[15], b=instruction[4], out=loadd);
+    DRegister(in=aluout,load=loadd,out=outd); //D
 
     stof(in=outa,out=addressM);
 
@@ -57,6 +58,7 @@ CHIP CPU {
         zy=instruction[9], ny=instruction[8],
         f=instruction[7], no=instruction[6],
         out=aluout, zr=aluzr, ng=alung);
+    Or16(a=aluout, b=false, out=outM);
 
     // j1 = instruction[2], aluout < 0
     // j2 = instruction[1], aluout = 0
@@ -71,13 +73,14 @@ CHIP CPU {
     Not(in=aluzr, out=alunzr); // alunzr: aluout ≠ 0
     And(a=alunng, b=alunzr, out=alups); // alups: aluout > 0
     Or(a=j1s,b=j2s,out=j12s);
-    Or(a=j12s,b=j3s,out=loadpc);
+    Or(a=j12s,b=j3s,out=loadpcifc);
+    And(a=instruction[15], b=loadpcifc, out=loadpc);
     PC(in=outa,load=loadpc,inc=true,reset=reset,out=outpc);
     stof(in=outpc,out=pc);
 
-    // d3 = instruction[3], controls A register
+    // d3 = instruction[5], controls A register
     // d2 = instruction[4], controls D register
-    // d1 = instruction[5], controls M (M[A])
+    // d1 = instruction[3], controls M (M[A])
 
-    And(a=instruction[15], b=instruction[5], out=writeM);
+    And(a=instruction[15], b=instruction[3], out=writeM);
 }
