@@ -54,32 +54,43 @@ class Parser:
         """
         Returns the dest mnemonic in the current C-command (8 possibilities).
         Should be called only when commandType() is C_COMMAND
+        i.e., return dest from
+        dest=comp;jump or
+        dest=comp
+        otherwise return null
         """
-        index = self.current_command.find('=')
-        if index<0:
+        equals_index = self.current_command.find('=')
+        if equals_index<0: # comp
             return 'null'
-        return self.current_command[:index]
+        # dest=comp;jump or dest=comp
+        else:
+            return self.current_command[:equals_index]
 
     def comp(self):
+        """
+        return comp from
+        dest=comp;jump or
+        comp;jump      or
+        dest=comp
+        """
         equals_index = self.current_command.find('=')
         semicolon_index = self.current_command.find(';')
-        if equals_index<0:
+        if equals_index<0: # comp;jump
             return self.current_command[:semicolon_index]
-        return self.current_command[equals_index:]
+        else if semicolon_index<0: # dest=comp
+            return self.current_command[(equals_index+1):]
+        else: # dest=comp;jump
+            return self.current_command[(equals_index+1):semicolon_index]
 
-        
-
-                                            
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def jump(self):
+        """
+        return jump from
+        dest=comp;jump or
+        comp;jump
+        otherwise return null
+        """
+        semicolon_index = self.current_command.find(';')
+        if semicolon_index<0: # dest=comp or comp
+            return 'null'
+        else: #...;jump
+            return self.current_command[(semicolon_index+1):]
