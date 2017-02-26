@@ -1,6 +1,5 @@
 from symbol_table import SymbolTable # thsi still needs to be implemented
 
-
 class Parser:
     def __init__(self, input):
         self.input = input.splitlines()
@@ -16,7 +15,7 @@ class Parser:
         """
         while len(self.input) and line_is_comment(self.input[0]):
             self.input.pop(0)
-        return len(self.input)
+        return bool(len(self.input))
 
     def advance(self):
         """
@@ -34,11 +33,13 @@ class Parser:
         - C_COMMAND for dest=comp;jump
         - L_COMMAND (actually, pseudocommand) for (Xxx) where Xxx is a symbol.
         """
-        if SymbolTable.contains(symbol):
+        if SymbolTable.contains(self.current_command):
             return 'L_command'
-        elif self.current_command.startswith('@') and self.current_command[1:].isdigit():
+        elif self.current_command.startswith('@') and\
+             (self.current_command[1:].isdigit() or\
+              SymbolTable.contains(self.current_command[1:]):
             return 'A_command'
-        elif any (substring in ['=', ';'] for  substring in self.current_command):
+        elif any (c in ['=', ';'] for c in self.current_command):
             return 'C_command'
         else:
             raise AttributeError('Given symbol {} does not exist'.format(self.current_command))
