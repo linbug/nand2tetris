@@ -1,3 +1,4 @@
+from code_module import dest, jump, comp
 from symbol_table import SymbolTable # thsi still needs to be implemented
 
 class Parser:
