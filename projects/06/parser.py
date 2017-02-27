@@ -8,7 +8,7 @@ class Parser:
 
     def line_is_comment(self, line):
         line = line.strip()
-        return line.startswith('//')
+        return (line.startswith('//') or line=="")
 
     def hasMoreCommands(self):
         """
