@@ -56,21 +56,22 @@ class Parser:
         """
         Returns the dest mnemonic in the current C-command (8 possibilities).
         Should be called only when commandType() is C_COMMAND
-        i.e., return dest from
+        i.e., return the binary for dest from
         dest=comp;jump or
         dest=comp
-        otherwise return null
+        otherwise for null
         """
         equals_index = self.current_command.find('=')
         if equals_index<0: # comp
-            return 'null'
+            mnemonic = 'null'
         # dest=comp;jump or dest=comp
         else:
-            return self.current_command[:equals_index]
+            mnemonic = self.current_command[:equals_index]
+        return dest(mnemonic)
 
     def comp(self):
         """
-        return comp from
+        return the binary for comp from
         dest=comp;jump or
         comp;jump      or
         dest=comp
@@ -78,21 +79,23 @@ class Parser:
         equals_index = self.current_command.find('=')
         semicolon_index = self.current_command.find(';')
         if equals_index<0: # comp;jump
-            return self.current_command[:semicolon_index]
-        else if semicolon_index<0: # dest=comp
-            return self.current_command[(equals_index+1):]
+            mnemonic = self.current_command[:semicolon_index]
+        elif semicolon_index<0: # dest=comp
+            mnemonic = self.current_command[(equals_index+1):]
         else: # dest=comp;jump
-            return self.current_command[(equals_index+1):semicolon_index]
+            mnemonic = self.current_command[(equals_index+1):semicolon_index]
+        return comp(mnemonic)
 
     def jump(self):
         """
-        return jump from
+        return the binary for jump from
         dest=comp;jump or
         comp;jump
-        otherwise return null
+        otherwise for null
         """
         semicolon_index = self.current_command.find(';')
         if semicolon_index<0: # dest=comp or comp
-            return 'null'
+            mnemonic = 'null'
         else: #...;jump
-            return self.current_command[(semicolon_index+1):]
+            mnemonic = self.current_command[(semicolon_index+1):]
+        return jump(mnemonic)
