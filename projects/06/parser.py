@@ -34,16 +34,14 @@ class Parser:
         - C_COMMAND for dest=comp;jump
         - L_COMMAND (actually, pseudocommand) for (Xxx) where Xxx is a symbol.
         """
-        if SymbolTable.contains(self.current_command):
+        if self.current_command.startswith('('):
             return 'L_command'
-        elif self.current_command.startswith('@') and\
-             (self.current_command[1:].isdigit() or\
-              SymbolTable.contains(self.current_command[1:]):
+        elif self.current_command.startswith('@'):
             return 'A_command'
         elif any (c in ['=', ';'] for c in self.current_command):
             return 'C_command'
         else:
-            raise AttributeError('Given symbol {} does not exist'.format(self.current_command))
+            raise AttributeError('invalid line: {}'.format(self.current_command))
 
     def symbol(self):
         """
