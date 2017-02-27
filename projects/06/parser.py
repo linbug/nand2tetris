@@ -50,7 +50,11 @@ class Parser:
         Returns the symbol or decimal Xxx of the current command @Xxx or (Xxx).
         Should be called only when commandType() is A_COMMAND or L_COMMAND.
         """
-        return SymbolTable.GetAddress(self.current_command)
+        symbol = self.current_command[1:]
+        if self.current_command[0] == '(':
+            return SymbolTable.GetAddress(symbol[:-1])
+        else:
+            return bin(int(symbol))[2:].zfill(15)
 
     def dest(self):
         """
