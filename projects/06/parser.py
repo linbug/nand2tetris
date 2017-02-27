@@ -14,7 +14,7 @@ class Parser:
         """
         Are there more commands in the input?
         """
-        while len(self.input) and line_is_comment(self.input[0]):
+        while len(self.input) and self.line_is_comment(self.input[0]):
             self.input.pop(0)
         return bool(len(self.input))
 
