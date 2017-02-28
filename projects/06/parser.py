@@ -49,7 +49,7 @@ class Parser:
         Should be called only when commandType() is A_COMMAND or L_COMMAND.
         """
         symbol = self.current_command[1:]
-        if self.current_command[0] == '(':
+        if self.current_command.startswith('('):
             return SymbolTable.GetAddress(symbol[:-1])
         else:
             return bin(int(symbol))[2:].zfill(15)
