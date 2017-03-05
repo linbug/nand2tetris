@@ -24,7 +24,7 @@ class Parser:
         command. Should be called only if hasMoreCommands() is true.
         Initially there is no current command.
         """
-        self.current_command = self.input.pop(0)
+        self.current_command = self.input.pop(0).strip()
 
     def commandType(self):
         """
