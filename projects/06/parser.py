@@ -1,5 +1,6 @@
-from code_module import dest, jump, comp
+import code_module
 from symbol_table import SymbolTable # thsi still needs to be implemented
+
 
 class Parser:
     def __init__(self, input):
@@ -69,7 +70,7 @@ class Parser:
         # dest=comp;jump or dest=comp
         else:
             mnemonic = self.current_command[:equals_index]
-        return dest(mnemonic)
+        return code_module.dest(mnemonic)
 
     def comp(self):
         """
@@ -86,7 +87,7 @@ class Parser:
             mnemonic = self.current_command[(equals_index+1):]
         else: # dest=comp;jump
             mnemonic = self.current_command[(equals_index+1):semicolon_index]
-        return comp(mnemonic)
+        return code_module.comp(mnemonic)
 
     def jump(self):
         """
@@ -100,4 +101,4 @@ class Parser:
             mnemonic = 'null'
         else: #...;jump
             mnemonic = self.current_command[(semicolon_index+1):]
-        return jump(mnemonic)
+        return code_module.jump(mnemonic)
