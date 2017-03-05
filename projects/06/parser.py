@@ -52,6 +52,8 @@ class Parser:
         symbol = self.current_command[1:]
         if self.current_command.startswith('('):
             return SymbolTable.GetAddress(symbol[:-1])
+        elif symbol.isalpha():
+            return SymbolTable.GetAddress(symbol)
         else:
             return bin(int(symbol))[2:].zfill(15)
 
