@@ -1,5 +1,4 @@
 import code_module
-from symbol_table import SymbolTable # thsi still needs to be implemented
 
 
 class Parser:
@@ -25,7 +24,11 @@ class Parser:
         command. Should be called only if hasMoreCommands() is true.
         Initially there is no current command.
         """
-        self.current_command = self.input.pop(0).strip()
+        line = self.input.pop(0)
+        comment_index = line.find('//')
+        if comment_index>=0:
+            line = line[:comment_index]
+        self.current_command = line.strip()
 
     def commandType(self):
         """
@@ -51,11 +54,9 @@ class Parser:
         """
         symbol = self.current_command[1:]
         if self.current_command.startswith('('):
-            return SymbolTable.GetAddress(symbol[:-1])
-        elif symbol.isalpha():
-            return SymbolTable.GetAddress(symbol)
+            return symbol[:-1]
         else:
-            return bin(int(symbol))[2:].zfill(15)
+            return symbol
 
     def dest(self):
         """
